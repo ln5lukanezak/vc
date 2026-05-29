@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS custom properties (dark theme tokens) ─────────────────────────── */
+:root {
+  /* Accent gradient: indigo → cyan */
+  --accent-from:    #6366f1;
+  --accent-to:      #06b6d4;
+  --accent-mid:     #818cf8;
+
+  /* Surfaces */
+  --surface-bg:     #0f172a;
+  --surface-1:      #1e293b;
+  --surface-2:      #334155;
+
+  /* Text */
+  --text-primary:   #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted:     #64748b;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+}
+
+/* ─── Base reset / global ────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--surface-bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* ─── Utility classes ────────────────────────────────────────────────────── */
+@layer components {
+  /* Accent gradient text */
+  .text-accent-gradient {
+    background: linear-gradient(135deg, var(--accent-from), var(--accent-to));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Accent gradient border underline */
+  .border-accent-gradient {
+    border-image: linear-gradient(135deg, var(--accent-from), var(--accent-to)) 1;
+  }
+
+  /* Monospace metric display */
+  .metric {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Sidebar nav item */
+  .nav-item {
+    @apply flex items-center gap-2 px-3 py-2 rounded-md text-sm
+           text-slate-400 hover:text-slate-100 hover:bg-slate-700
+           transition-colors duration-150 cursor-pointer select-none;
+  }
+
+  .nav-item.active {
+    @apply text-indigo-300 bg-slate-700;
+  }
+
+  /* Section heading in sidebar */
+  .nav-group-label {
+    @apply px-3 pt-4 pb-1 text-xs font-semibold uppercase tracking-widest
+           text-slate-500;
+  }
+}
+
+/* ─── Scrollbar styling ──────────────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--surface-1); }
+::-webkit-scrollbar-thumb  { background: var(--surface-2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
