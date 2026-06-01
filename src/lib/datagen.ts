@@ -174,6 +174,68 @@ export function generateSpiral({
   return pts
 }
 
+// ─── Gaussian Blobs ───────────────────────────────────────────────────────────
+
+export interface BlobsOptions {
+  /** total number of points (distributed evenly across classes) */
+  n: number
+  /** number of classes / clusters (2–4) */
+  classes: number
+  /**
+   * inter-cluster distance multiplier (1 = clusters placed on a unit circle,
+   * larger values spread them further apart). Typical range: 0.5–3.
+   */
+  separation: number
+  /** per-cluster isotropic std (controls cluster spread). Typical range: 0.05–0.5 */
+  noise: number
+  /** RNG seed for reproducibility */
+  seed?: number
+}
+
+/**
+ * Isotropic Gaussian blobs for multi-class classification.
+ *
+ * `classes` (2–4) cluster centres are placed evenly around a circle of radius
+ * `separation`.  Each point is drawn as centre + N(0, noise²) in both axes.
+ * Coordinates are in roughly [-(separation+noise·3), +(separation+noise·3)].
+ *
+ * Label 0…classes-1.  Points are shuffled before return.
+ */
+export function generateBlobs({
+  n,
+  classes,
+  separation,
+  noise,
+  seed = 42,
+}: BlobsOptions): Point2D[] {
+  const k = Math.max(2, Math.min(4, Math.round(classes)))
+  const rand = mulberry32(seed)
+  const randn = makeRandn(seed + 1)
+  const perClass = Math.floor(n / k)
+  const pts: Point2D[] = []
+
+  for (let c = 0; c < k; c++) {
+    const angle = (2 * Math.PI * c) / k
+    const cx = separation * Math.cos(angle)
+    const cy = separation * Math.sin(angle)
+    const count = c < k - 1 ? perClass : n - pts.length
+    for (let i = 0; i < count; i++) {
+      pts.push({
+        x: cx + randn() * noise,
+        y: cy + randn() * noise,
+        label: c,
+      })
+    }
+  }
+
+  // Shuffle
+  for (let i = pts.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [pts[i], pts[j]] = [pts[j], pts[i]]
+  }
+  return pts
+}
+
 export interface GenerateRegressionOptions {
   n: number       // number of samples
   noise: number   // gaussian noise std
