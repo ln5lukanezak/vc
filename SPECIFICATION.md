@@ -1,8 +1,8 @@
 # ML Explorer — Interactive Machine Learning Learning & Visualization Platform
 ## Software Specification Document
 
-**Version:** 2.1 (Decisions locked — ready for final go-ahead)
-**Date:** 2026-05-29
+**Version:** 2.2 (Scope revised — K-Means & NLP aborted 2026-06-01)
+**Date:** 2026-05-29 (updated 2026-06-01)
 **Deployment target:** Vercel (static build)
 **Status:** ✅ Decisions approved (§0) — awaiting green light to start development
 
@@ -30,7 +30,7 @@
 >
 > **Remains deferred (no change):** CNN Mode B (live classification + activation flow).
 
-All other methods in §6 (SVM beyond core, KNN, trees/ensembles, Naive Bayes, GMM, DBSCAN, PCA, t-SNE) are **deferred** unless time permits; they remain documented for future expansion. Build order follows §9, with the 7 methods above as the committed deliverable.
+All other methods in §6 (SVM beyond core, KNN, trees/ensembles, Naive Bayes, GMM, DBSCAN, PCA, t-SNE) are **deferred** unless time permits; they remain documented for future expansion. Build order follows §9, with the **5 methods** above as the committed deliverable.
 
 ---
 
@@ -287,7 +287,7 @@ The flagship feature. Two integrated modes:
 1. **Stack confirmation:** OK with **Vite + React + TypeScript + Tailwind + TF.js** (build step, deploys cleanly to Vercel)? Or prefer leaner vanilla TS + Vite (lower complexity, but heavier custom code for the CNN classifier)?
 2. **CNN classifier source:** Acceptable to **bundle a small pre-trained MNIST-style CNN** (weights in `/public`, run via TF.js)? Alternative: ship Mode A (mechanics) only and make Mode B a stretch goal.
 3. **Method set size:** The P0+P1 set is ~11 methods. Confirm that breadth, or should I concentrate effort on fewer methods done to a higher polish (e.g., guarantee CNN + MLP + 4 classics)?
-4. **NLP depth:** Is a single-head **self-attention heatmap** (illustrative) enough, or do you want a genuinely pre-trained tiny transformer (heavier)?
+4. ~~**NLP depth:** Is a single-head self-attention heatmap (illustrative) enough, or do you want a genuinely pre-trained tiny transformer (heavier)?~~ — *moot; NLP aborted 2026-06-01.*
 5. **Visual style:** Dark + indigo→cyan accent acceptable, or a specific palette/branding?
 
 ---
