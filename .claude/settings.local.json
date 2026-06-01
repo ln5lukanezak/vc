@@ -8,7 +8,9 @@
       "Bash(git add *)",
       "Bash(node -e \"const p = require\\('./node_modules/react-katex/package.json'\\); console.log\\(JSON.stringify\\({main:p.main,types:p.types,exports:p.exports},null,2\\)\\)\")",
       "PowerShell(npm run *)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "PowerShell(New-Item *)",
+      "PowerShell(git revert *)"
     ]
   }
 }
