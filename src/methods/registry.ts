@@ -30,7 +30,6 @@ export interface VisualizationProps {
 const GROUP_ORDER = [
   'Regression',
   'Classification',
-  'Unsupervised',
   'Neural Networks',
   'Deep Learning',
 ]

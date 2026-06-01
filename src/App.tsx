@@ -44,12 +44,6 @@ function WelcomePanel() {
             desc: 'Animate a kernel sweep, then classify your drawn digit.',
             id: 'cnn',
           },
-          {
-            icon: '⬡',
-            title: 'K-Means',
-            desc: 'See centroids converge step by step with inertia tracking.',
-            id: 'kmeans',
-          },
         ].map((card) => (
           <div
             key={card.id}
@@ -85,7 +79,7 @@ function ComingSoonPanel({ id }: { id: string }) {
 
 // ─── App root ──────────────────────────────────────────────────────────────────
 export default function App() {
-  // Hash-based routing: #/linear-regression, #/kmeans, etc.
+  // Hash-based routing: #/linear-regression, #/svm, etc.
   const [activeId, navigate] = useHashRoute('linear-regression')
 
   const method = getMethod(activeId)
