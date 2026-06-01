@@ -82,10 +82,10 @@ function drawSurface(
   canvas: HTMLCanvasElement,
   prob0Grid: number[][],     // [row][col] = prob(class 0)
   classGrid: number[][],     // [row][col] = argmax class
+  maxProbGrid: number[][],   // [row][col] = prob(argmax class)
   data: Point2D[],
   bounds: { xMin: number; xMax: number; yMin: number; yMax: number },
   numCls: number,
-  model: SoftmaxClassifier,
 ) {
   const dpr = window.devicePixelRatio || 1
   const w = canvas.clientWidth
@@ -129,10 +129,7 @@ function drawSurface(
       } else {
         // Multi-class: colour by argmax, fade by confidence
         const k = classGrid[r][c]
-        const xs = makeGridCoords(bounds.xMin, bounds.xMax, cols)
-        const ys = makeGridCoords(bounds.yMin, bounds.yMax, rows)
-        const probs = model.predict(xs[c], ys[r])
-        const maxP = probs[k]
+        const maxP = maxProbGrid[r][c]
         const t = Math.max(0, (maxP - 1 / numCls) / (1 - 1 / numCls))
         const [cr, cg, cb] = CLASS_RGB[k] ?? CLASS_RGB[0]
         const bg = 15
@@ -277,9 +274,9 @@ export function Visualization() {
     const numCls = classesRef.current
     const xs = makeGridCoords(bounds.xMin, bounds.xMax, GRID_SIZE)
     const ys = makeGridCoords(bounds.yMin, bounds.yMax, GRID_SIZE)
-    const { grid, classGrid } = model.predictGrid(xs, ys)
+    const { grid, classGrid, maxProbGrid } = model.predictGrid(xs, ys)
 
-    drawSurface(canvas, grid, classGrid, data, bounds, numCls, model)
+    drawSurface(canvas, grid, classGrid, maxProbGrid, data, bounds, numCls)
     lossChartRef.current?.resize()
     lossChartRef.current?.draw()
     accChartRef.current?.resize()

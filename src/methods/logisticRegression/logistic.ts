@@ -176,14 +176,16 @@ export class SoftmaxClassifier {
   predictGrid(
     xs: number[],
     ys: number[],
-  ): { grid: number[][]; classGrid: number[][] } {
+  ): { grid: number[][]; classGrid: number[][]; maxProbGrid: number[][] } {
     const rows = ys.length
     const cols = xs.length
     const grid: number[][] = []
     const classGrid: number[][] = []
+    const maxProbGrid: number[][] = []
     for (let r = 0; r < rows; r++) {
       const row: number[] = []
       const classRow: number[] = []
+      const maxProbRow: number[] = []
       for (let c = 0; c < cols; c++) {
         const probs = this.predict(xs[c], ys[r])
         row.push(probs[0])
@@ -192,11 +194,13 @@ export class SoftmaxClassifier {
           if (probs[k] > probs[bestK]) bestK = k
         }
         classRow.push(bestK)
+        maxProbRow.push(probs[bestK])
       }
       grid.push(row)
       classGrid.push(classRow)
+      maxProbGrid.push(maxProbRow)
     }
-    return { grid, classGrid }
+    return { grid, classGrid, maxProbGrid }
   }
 
   /** Compute confusion matrix (K×K). matrix[true][pred] = count. */
