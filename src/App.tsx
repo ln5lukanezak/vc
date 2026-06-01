@@ -123,14 +123,6 @@ export default function App() {
 
         {/* Spacer */}
         <div className="flex-1" />
-
-        {/* Attribution */}
-        <p className="hidden sm:block text-xs text-slate-500 shrink-0">
-          by{' '}
-          <span className="text-slate-400 font-medium">Luka Nežak</span>
-          {' · '}built with{' '}
-          <span className="text-indigo-400 font-medium">Claude</span>
-        </p>
       </header>
 
       {/* ── Body: sidebar + content ── */}
