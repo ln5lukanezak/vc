@@ -14,17 +14,21 @@
 |---|----------|--------|
 | 1 | **Tech stack** | Vite + React + TypeScript + Tailwind CSS + TensorFlow.js → static build on Vercel |
 | 2 | **CNN classifier (Mode B)** | Bundle a small **pre-trained MNIST CNN** (weights in `/public`, run via TF.js); live digit classification + activation flow |
-| 3 | **Scope** | **Focused & polished** — 6 core methods + NLP (see final list below) |
-| 4 | **NLP depth** | Illustrative **single-head self-attention heatmap** + in-browser sentiment + word embeddings |
+| 3 | **Scope** | **Focused & polished** — 5 committed methods (K-Means and NLP removed 2026-06-01; see final list below) |
+| 4 | ~~**NLP depth**~~ | ~~Illustrative single-head self-attention heatmap + in-browser sentiment + word embeddings~~ — **ABORTED 2026-06-01** |
 
-**Final method list (shipped):**
+**Final method list (shipped) — updated 2026-06-01, 5 methods:**
 1. Linear & Polynomial Regression + regularization — §6.1
 2. Logistic / Softmax Regression — §6.2
 3. Support Vector Machine (linear/poly/RBF kernels) — §6.3
-4. K-Means / K-Means++ — §6.7
-5. Neural Network MLP Playground (advanced) — §6.12
-6. ★ CNN Visualizer (Mode A mechanics + Mode B pre-trained classifier) — §6.13
-7. NLP — Embeddings & Self-Attention — §6.14
+4. Neural Network MLP Playground (advanced) — §6.12
+5. ★ CNN Visualizer — Mode A (animated convolution mechanics) — §6.13
+
+> **Removed from committed scope (2026-06-01):**
+> - ~~K-Means / K-Means++~~ (§6.7) — built and committed, then aborted; code removed.
+> - ~~NLP — Embeddings & Self-Attention~~ (§6.14) — never started; phase aborted.
+>
+> **Remains deferred (no change):** CNN Mode B (live classification + activation flow).
 
 All other methods in §6 (SVM beyond core, KNN, trees/ensembles, Naive Bayes, GMM, DBSCAN, PCA, t-SNE) are **deferred** unless time permits; they remain documented for future expansion. Build order follows §9, with the 7 methods above as the committed deliverable.
 
@@ -86,12 +90,13 @@ Each method is presented through an identical tabbed interface:
 
 ## 5. Global UI / Layout
 
-- **Left sidebar (grouped nav):**
+- **Left sidebar (grouped nav) — committed methods only:**
   - *Regression* → Linear/Polynomial Regression (+ Ridge/Lasso)
-  - *Classification* → Logistic/Softmax Regression, Support Vector Machine, K-Nearest Neighbors, Decision Tree & Ensembles, Naive Bayes
-  - *Unsupervised* → K-Means (++), Gaussian Mixture Models (EM), DBSCAN, PCA, t-SNE
+  - *Classification* → Logistic/Softmax Regression, Support Vector Machine
+  - ~~*Unsupervised*~~ → *(group hidden — K-Means removed; no committed methods in this group)*
   - *Neural Networks* → MLP Playground (advanced)
-  - *Deep Learning* → **CNN Visualizer**, NLP: Embeddings & Self-Attention
+  - *Deep Learning* → **CNN Visualizer** (Mode A)
+  - *(All other listed methods remain deferred)*
 - **Top header:** title, tagline, global theme, link to spec/about.
 - **Main area:** 6-tab method view (§4).
 - **Status bar:** training state, epoch/iteration, FPS.
@@ -140,6 +145,12 @@ Each method is presented through an identical tabbed interface:
 - Gaussian NB: visualize per-class conditional densities + resulting boundary; controls for shared/independent covariance.
 
 ### 6.7 K-Means / K-Means++ *(Unsupervised)*
+
+> **REMOVED — 2026-06-01.** K-Means / K-Means++ has been removed from the committed scope.
+> The implementation was built and committed, then aborted by project owner decision.
+> The code has been deleted from `src/methods/kmeans/`; git history retains it.
+> This section is kept for reference only.
+
 - **Data:** k Gaussian blobs (+ anisotropic/unequal-variance toggle).
 - **Model:** Lloyd's algorithm; **random vs. k-means++** init.
 - **Learning:** animated assign→update with centroid trails; **inertia (WCSS)** per iteration; **elbow method** plot across k.
@@ -194,6 +205,11 @@ The flagship feature. Two integrated modes:
 **Formulas:** 2D discrete convolution, output-size formula `⌊(W−K+2P)/S⌋+1`, ReLU, max-pool, softmax; note that CNNs *learn* the kernels.
 
 ### 6.14 NLP — Embeddings & Self-Attention *(Deep Learning)*
+
+> **REMOVED — 2026-06-01.** NLP — Embeddings & Self-Attention has been removed from the
+> committed scope. No code was ever written for this feature. This section is kept for
+> reference only.
+
 - **Tokenization view:** text → tokens → ids, with subword note.
 - **Word embeddings:** a small bundled embedding set projected to 2D (PCA/t-SNE); show nearest-neighbor words; vector arithmetic ("king − man + woman").
 - **Self-attention visualizer:** for a short input sentence, compute/display a **single-head attention heatmap** (which tokens attend to which); explain Q/K/V intuition. (Weights either bundled-tiny or illustrative-computed.)
@@ -237,11 +253,11 @@ The flagship feature. Two integrated modes:
 
 ## 9. Scope & Prioritization (build order)
 
-**P0 (must):** App shell + nav + 6-tab layout; Linear/Poly Regression; Logistic/Softmax; K-Means(++); **MLP Playground (advanced)**; **CNN Visualizer Mode A (animated convolution sweep + feature maps + pooling)**.
-**P1 (should):** SVM (kernels), KNN, Decision Tree/Ensembles, GMM (EM), PCA, **CNN Mode B (live digit classification + activation flow)**, NLP sentiment + attention heatmap.
-**P2 (nice):** Naive Bayes, DBSCAN, t-SNE, embedding arithmetic, image upload, editable kernel matrix, regularization-path/elbow extras.
+**P0 (must — delivered):** App shell + nav + 6-tab layout; Linear/Poly Regression; Logistic/Softmax; SVM; **MLP Playground (advanced)**; **CNN Visualizer Mode A (animated convolution sweep + feature maps + pooling)**.
+**P1 (deferred):** CNN Mode B (live digit classification + activation flow), KNN, Decision Tree/Ensembles, GMM (EM), PCA.
+**P2 (nice-to-have):** Naive Bayes, DBSCAN, t-SNE, image upload, editable kernel matrix.
 
-If time is short, drop from P2 upward; every shipped method keeps all 6 sections.
+> **Removed from all tiers (2026-06-01):** K-Means / K-Means++ and NLP — Embeddings & Self-Attention.
 
 ---
 
@@ -259,10 +275,9 @@ If time is short, drop from P2 upward; every shipped method keeps all 6 sections
 - [ ] Builds with `vite build` and deploys to Vercel; production URL loads, no console errors, no runtime external calls.
 - [ ] Sidebar groups all shipped methods; each renders the 6-tab layout (§4).
 - [ ] Regression/Logistic/MLP visibly animate during training; loss decreases on screen; optimizers selectable.
-- [ ] SVM shows support vectors & kernel boundary; K-Means centroids converge with inertia readout; GMM ellipses animate; PCA shows components + scree.
+- [ ] SVM shows support vectors & kernel boundary.
 - [ ] **CNN Mode A:** kernel visibly sweeps the image with receptive-field highlight, writing the output feature map in sync; stride/padding/kernel-size/pooling change behavior; multi-filter feature-map stack renders.
 - [ ] **CNN Mode B:** user draws a digit → pre-trained CNN predicts → activations of each layer are visualized → softmax bars shown.
-- [ ] NLP: live sentiment prediction on typed text + attention heatmap renders.
 - [ ] 60fps-ish animations on a typical laptop; responsive, polished dark UI.
 
 ---

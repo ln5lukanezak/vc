@@ -82,34 +82,31 @@
 
 ---
 
-## Phase 4 — Classification & clustering classics
+## Phase 4 — Classification classics  *(COMPLETE)*
 
-**Goal:** Round out breadth with three more polished methods.
+**Goal:** Round out breadth with two more polished methods.
 
 1. **Logistic / Softmax Regression (§6.2):** binary + multinomial; BCE/CE loss; probability heatmap; animated boundary; confusion matrix.
 2. **Support Vector Machine (§6.3):** linear/poly/RBF kernels; soft-margin C, γ; support-vector highlighting; margin + kernel influence heatmap.
-3. **K-Means / K-Means++ (§6.7):** animated assign→update with centroid trails; inertia per iteration; Voronoi; elbow chart.
-4. **Checkpoint:** all three animate and deploy.
+3. **Checkpoint:** both animate and deploy.
 
-**Deliverable:** Logistic/Softmax, SVM, K-Means live.
+**Deliverable:** Logistic/Softmax and SVM live.
 
----
-
-## Phase 5 — NLP: Embeddings & Self-Attention  *(§6.14)*
-
-**Goal:** The committed NLP feature.
-
-1. Tokenization view (text → tokens → ids).
-2. In-browser sentiment classifier (bag-of-words/embeddings + logistic regression) with live prediction + top influential tokens.
-3. Bundled small word-embeddings → 2D projection (PCA) + nearest neighbors.
-4. **Single-head self-attention heatmap** for a short sentence (Q/K/V intuition).
-5. **Checkpoint:** type text → live sentiment + attention heatmap; deploy.
-
-**Deliverable:** NLP method live — all 7 committed methods shipped.
+> **NOTE:** K-Means / K-Means++ (§6.7) was built and committed but has been **aborted and
+> removed** per project owner decision (2026-06-01). Its code has been deleted; the git history
+> retains it for reference.
 
 ---
 
-## Phase 6 — Polish, QA, final deploy
+## ~~Phase 5 — NLP: Embeddings & Self-Attention~~  *(ABORTED)*
+
+> **NOTE:** This phase has been **aborted** per project owner decision (2026-06-01).
+> No code was ever written for it. NLP (§6.14) is removed from the committed scope.
+> Phase 6 (polish/QA/final deploy) is renumbered Phase 5 — see below.
+
+---
+
+## Phase 5 — Polish, QA, final deploy  *(was Phase 6)*
 
 1. Cross-method consistency: tab layout, spacing, dark theme, responsive checks.
 2. "Experiments / Insights" prompts (§4.6) per method; tighten copy & formulas.
@@ -125,7 +122,7 @@
 
 - `plot.ts`, `datagen.ts`, `mathutils.ts`, `optimizers.ts` are built incrementally — each phase extends them as needed.
 - `optimizers.ts` is shared by Regression (P1) and MLP (P3) — build the interface in P1.
-- `heatmap.ts` (P2) is reused by MLP neuron viz (P3) and attention heatmap (P5).
+- `heatmap.ts` (P2) is reused by MLP neuron viz (P3).
 - CNN pre-trained weights are the only external asset; secure them early in Phase 2 (fallback: Mode A mechanics ship independently if weights slip).
 
 ## Risk register
@@ -133,12 +130,12 @@
 | Risk | Mitigation |
 |------|------------|
 | CNN weights/model integration slips | Mode A (mechanics) ships standalone; Mode B is additive, not blocking. |
-| Scope overrun on 7 methods | Phases are independently shippable; stop anywhere with a working demo. |
+| Scope overrun | Phases are independently shippable; stop anywhere with a working demo. (Scope reduced to 5 committed methods.) |
 | Animation perf jank | `requestAnimationFrame`, cap steps/frame, throttle redraws. |
 | Vercel/build surprise | Deploy in Phase 0 and after every phase. |
-| TF.js bundle size | Lazy-load TF.js + model only on CNN/NLP routes. |
+| TF.js bundle size | Lazy-load TF.js + model only on the CNN route. |
 
 ## Build sequence (committed)
 
-`Phase 0 → 1 → 2 → 3 → 4 → 5 → 6`
-(Headline CNN intentionally early in P2; classics batched in P4; always deployable.)
+`Phase 0 → 1 → 2 → 3 → 4 → 5`
+(Headline CNN intentionally early in P2; classics batched in P4; polish/QA in P5; always deployable.)
