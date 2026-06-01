@@ -4,7 +4,7 @@ import { Sidebar } from './components/Sidebar'
 import { MethodView } from './components/MethodView'
 
 // ─── Welcome panel ─────────────────────────────────────────────────────────────
-function WelcomePanel() {
+function WelcomePanel({ onSelect }: { onSelect: (id: string) => void }) {
   return (
     <div className="flex flex-col items-center justify-center h-full px-8 text-center gap-6">
       {/* Accent gradient orb */}
@@ -41,14 +41,15 @@ function WelcomePanel() {
           {
             icon: '◉',
             title: 'CNN Visualizer',
-            desc: 'Animate a kernel sweep, then classify your drawn digit.',
-            id: 'cnn',
+            desc: 'Watch a kernel sweep over an image, building the feature map cell by cell.',
+            id: 'cnn-visualizer',
           },
         ].map((card) => (
-          <div
+          <button
             key={card.id}
+            onClick={() => onSelect(card.id)}
             className="bg-slate-800 border border-slate-700 rounded-lg p-4 text-left
-                       hover:border-indigo-500/60 transition-colors duration-200 cursor-default"
+                       hover:border-indigo-500/60 transition-colors duration-200 cursor-pointer"
           >
             <span className="text-2xl">{card.icon}</span>
             <h3 className="mt-2 text-sm font-semibold text-slate-200">
@@ -57,22 +58,23 @@ function WelcomePanel() {
             <p className="mt-1 text-xs text-slate-400 leading-relaxed">
               {card.desc}
             </p>
-          </div>
+          </button>
         ))}
       </div>
     </div>
   )
 }
 
-// ─── Coming Soon panel ─────────────────────────────────────────────────────────
-function ComingSoonPanel({ id }: { id: string }) {
+// ─── Not-found panel ───────────────────────────────────────────────────────────
+function NotFoundPanel({ id }: { id: string }) {
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-4 text-slate-400">
-      <div className="text-4xl opacity-30">⚙</div>
-      <p className="text-lg font-medium text-slate-300 capitalize">
-        {id.replace(/-/g, ' ')}
+    <div className="flex flex-col items-center justify-center h-full gap-4 px-8 text-center text-slate-400">
+      <div className="text-4xl opacity-30">∅</div>
+      <p className="text-lg font-medium text-slate-300">Method not found</p>
+      <p className="text-sm text-slate-500 max-w-sm">
+        “{id.replace(/-/g, ' ')}” isn’t one of the available methods. Pick one
+        from the sidebar to get started.
       </p>
-      <p className="text-sm text-slate-500">Coming in a later phase.</p>
     </div>
   )
 }
@@ -80,7 +82,8 @@ function ComingSoonPanel({ id }: { id: string }) {
 // ─── App root ──────────────────────────────────────────────────────────────────
 export default function App() {
   // Hash-based routing: #/linear-regression, #/svm, etc.
-  const [activeId, navigate] = useHashRoute('linear-regression')
+  // Empty default → land on the Welcome screen.
+  const [activeId, navigate] = useHashRoute('')
 
   const method = getMethod(activeId)
 
@@ -92,8 +95,12 @@ export default function App() {
                    bg-slate-900 border-b border-slate-700/60
                    shadow-[0_1px_0_0_rgba(99,102,241,0.15)]"
       >
-        {/* Logo + title */}
-        <div className="flex items-center gap-3">
+        {/* Logo + title — click to return to the Welcome screen */}
+        <button
+          onClick={() => navigate('')}
+          className="flex items-center gap-3 cursor-pointer"
+          aria-label="ML Explorer — home"
+        >
           <div
             className="w-8 h-8 rounded-md flex items-center justify-center text-white font-bold text-sm select-none"
             style={{ background: 'linear-gradient(135deg, #6366f1, #06b6d4)' }}
@@ -104,7 +111,7 @@ export default function App() {
           <span className="text-lg font-bold tracking-tight text-slate-100">
             ML Explorer
           </span>
-        </div>
+        </button>
 
         {/* Divider */}
         <span className="hidden sm:block text-slate-600 select-none">|</span>
@@ -128,9 +135,9 @@ export default function App() {
           {method ? (
             <MethodView method={method} />
           ) : activeId ? (
-            <ComingSoonPanel id={activeId} />
+            <NotFoundPanel id={activeId} />
           ) : (
-            <WelcomePanel />
+            <WelcomePanel onSelect={navigate} />
           )}
         </main>
       </div>
