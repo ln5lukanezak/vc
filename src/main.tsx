@@ -6,6 +6,7 @@ import 'katex/dist/katex.min.css'
 // Method registrations — must be imported before App renders
 import './methods/linearRegression/index'
 import './methods/logisticRegression/index'
+import './methods/svm/index'
 import './methods/cnnVisualizer/index'
 import './methods/mlpPlayground/index'
 import App from './App.tsx'
