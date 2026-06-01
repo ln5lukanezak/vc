@@ -23,7 +23,7 @@ import type { KernelType } from './svm'
 
 const GRID_SIZE = 60           // decision-surface resolution
 const PASSES_PER_FRAME = 2     // SMO passes per RAF tick
-const MAX_AUTO_PASSES = 200    // stop animation after this many passes
+const MAX_AUTO_PASSES = 1000   // stop animation after this many passes
 
 // Class colours: indigo (class 0) / emerald (class 1)
 const CLASS_RGB: [[number,number,number],[number,number,number]] = [
