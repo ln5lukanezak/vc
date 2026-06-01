@@ -320,6 +320,22 @@ export function Visualization() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageKey, kernelKey, stride, padding])
 
+  // Redraw on viewport resize (heatmaps re-fit to their container in renderAll)
+  useEffect(() => {
+    let raf = 0
+    const onResize = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        if (sweepRef.current) renderAll(sweepRef.current)
+      })
+    }
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+      cancelAnimationFrame(raf)
+    }
+  }, [renderAll])
+
   const inputRows = SAMPLE_IMAGES[imageKey].data.length
   const inputCols = SAMPLE_IMAGES[imageKey].data[0]?.length ?? 0
 

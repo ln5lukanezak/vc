@@ -339,6 +339,20 @@ export function Visualization() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Redraw on viewport resize (canvas re-fits to its container on each draw)
+  useEffect(() => {
+    let raf = 0
+    const onResize = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => drawFrame())
+    }
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+      cancelAnimationFrame(raf)
+    }
+  }, [drawFrame])
+
   // ── Button handlers ────────────────────────────────────────────────────
 
   const handleTrain = () => {
@@ -411,7 +425,7 @@ export function Visualization() {
   // ── Render ─────────────────────────────────────────────────────────────
 
   return (
-    <div className="flex flex-col gap-4 h-full">
+    <div className="flex flex-col gap-4 min-h-full lg:h-full">
 
       {/* Controls row */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 shrink-0">
@@ -534,8 +548,8 @@ export function Visualization() {
       </div>
 
       {/* Main canvas */}
-      <div className="flex flex-1 gap-4 min-h-0">
-        <div className="flex flex-col gap-2 flex-1 min-h-0">
+      <div className="flex flex-col lg:flex-row flex-1 gap-4 min-h-0">
+        <div className="flex flex-col gap-2 h-80 lg:h-auto lg:flex-1 min-h-0">
           <SectionHeading>Decision Surface · boundary f=0 · margins f=±1</SectionHeading>
           <div
             className="flex-1 min-h-0 rounded-md overflow-hidden border border-slate-700/60 bg-slate-950"
@@ -546,7 +560,7 @@ export function Visualization() {
         </div>
 
         {/* Legend + info */}
-        <div className="flex flex-col gap-3 w-48 shrink-0">
+        <div className="flex flex-col gap-3 w-full lg:w-48 shrink-0">
           <SectionHeading>Legend</SectionHeading>
           <div className="space-y-2 text-xs text-slate-400">
             <div className="flex items-center gap-2">

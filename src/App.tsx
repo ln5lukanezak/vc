@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useHashRoute } from './hooks/useHashRoute'
 import { getMethod } from './methods/registry'
 import { Sidebar } from './components/Sidebar'
@@ -84,20 +85,41 @@ export default function App() {
   // Hash-based routing: #/linear-regression, #/svm, etc.
   // Empty default → land on the Welcome screen.
   const [activeId, navigate] = useHashRoute('')
+  // Mobile nav drawer (sidebar collapses below the `lg` breakpoint).
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   const method = getMethod(activeId)
+
+  // Navigate + close the mobile drawer (no-op on desktop where it's always open).
+  const handleSelect = (id: string) => {
+    navigate(id)
+    setDrawerOpen(false)
+  }
 
   return (
     <div className="flex flex-col h-screen bg-[var(--surface-bg)] text-[var(--text-primary)]">
       {/* ── Header ── */}
       <header
-        className="flex items-center gap-4 px-6 py-3 shrink-0
+        className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 shrink-0
                    bg-slate-900 border-b border-slate-700/60
                    shadow-[0_1px_0_0_rgba(99,102,241,0.15)]"
       >
+        {/* Hamburger — toggles the nav drawer on small screens */}
+        <button
+          onClick={() => setDrawerOpen((o) => !o)}
+          className="lg:hidden -ml-1 p-1.5 rounded-md text-slate-300 hover:bg-slate-800
+                     focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          aria-label={drawerOpen ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={drawerOpen}
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+            <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          </svg>
+        </button>
+
         {/* Logo + title — click to return to the Welcome screen */}
         <button
-          onClick={() => navigate('')}
+          onClick={() => handleSelect('')}
           className="flex items-center gap-3 cursor-pointer"
           aria-label="ML Explorer — home"
         >
@@ -127,9 +149,15 @@ export default function App() {
       </header>
 
       {/* ── Body: sidebar + content ── */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar is generated from the method registry */}
-        <Sidebar activeId={activeId} onSelect={navigate} />
+      {/* `relative` anchors the mobile drawer + backdrop to the body (below the header). */}
+      <div className="relative flex flex-1 overflow-hidden">
+        {/* Sidebar is generated from the method registry; it's a drawer below `lg`. */}
+        <Sidebar
+          activeId={activeId}
+          onSelect={handleSelect}
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        />
 
         <main className="flex-1 overflow-hidden bg-[var(--surface-bg)]">
           {method ? (
@@ -137,7 +165,7 @@ export default function App() {
           ) : activeId ? (
             <NotFoundPanel id={activeId} />
           ) : (
-            <WelcomePanel onSelect={navigate} />
+            <WelcomePanel onSelect={handleSelect} />
           )}
         </main>
       </div>

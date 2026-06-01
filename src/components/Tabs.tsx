@@ -62,7 +62,7 @@ export function Tabs({ tabs, defaultTab }: TabsProps) {
       </div>
 
       {/* Tab content */}
-      <div className="flex-1 overflow-y-auto p-6" role="tabpanel">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6" role="tabpanel">
         {activeTab?.content ?? null}
       </div>
     </div>

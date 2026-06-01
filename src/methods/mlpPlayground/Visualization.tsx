@@ -398,6 +398,20 @@ export function Visualization() {
     accChartRef.current?.draw()
   }, [])
 
+  // Redraw on viewport resize (canvases re-fit to their container on each draw)
+  useEffect(() => {
+    let raf = 0
+    const onResize = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => drawBoundary())
+    }
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+      cancelAnimationFrame(raf)
+    }
+  }, [drawBoundary])
+
   // ── Update neuron maps (throttled) ────────────────────────────────────────
   const updateNeuronMaps = useCallback(() => {
     const mlp = mlpRef.current
@@ -509,7 +523,7 @@ export function Visualization() {
 
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col gap-4 h-full">
+    <div className="flex flex-col gap-4 min-h-full lg:h-full">
 
       {/* ── Row 1: Controls ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 shrink-0">
@@ -615,10 +629,10 @@ export function Visualization() {
       </div>
 
       {/* ── Row 3: Main visuals ── */}
-      <div className="flex flex-1 gap-4 min-h-0">
+      <div className="flex flex-col lg:flex-row flex-1 gap-4 min-h-0">
 
         {/* Decision boundary */}
-        <div className="flex flex-col gap-2 flex-1 min-h-0">
+        <div className="flex flex-col gap-2 h-80 lg:h-auto lg:flex-1 min-h-0">
           <SectionHeading>Decision Boundary</SectionHeading>
           <div className="flex-1 min-h-0 rounded-md overflow-hidden border border-slate-700/60 bg-slate-950"
                style={{ minHeight: 240 }}>
@@ -627,7 +641,7 @@ export function Visualization() {
         </div>
 
         {/* Right panel: architecture + charts + neuron maps */}
-        <div className="flex flex-col gap-3 w-56 shrink-0 overflow-y-auto">
+        <div className="flex flex-col gap-3 w-full lg:w-56 shrink-0 lg:overflow-y-auto">
 
           <SectionHeading>Architecture</SectionHeading>
           <ArchEditor

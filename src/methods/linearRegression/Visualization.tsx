@@ -264,6 +264,20 @@ export function Visualization() {
     drawFrame()
   }, [modelDegree, optName, lrKey, initTraining, drawFrame])
 
+  // Redraw on viewport resize (canvases re-fit to their container on each draw)
+  useEffect(() => {
+    let raf = 0
+    const onResize = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => drawFrame())
+    }
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+      cancelAnimationFrame(raf)
+    }
+  }, [drawFrame])
+
   // ─── Training loop ────────────────────────────────────────────────────────
   const trainLoop = useCallback(() => {
     if (!isTrainingRef.current) return
@@ -346,7 +360,7 @@ export function Visualization() {
   const maxAbsW = Math.max(...wOrig.map(Math.abs), 0.01)
 
   return (
-    <div className="flex flex-col gap-4 h-full">
+    <div className="flex flex-col gap-4 min-h-full lg:h-full">
       {/* Controls row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 shrink-0">
         <Slider
@@ -393,9 +407,9 @@ export function Visualization() {
       </div>
 
       {/* Canvas + loss chart */}
-      <div className="flex flex-1 gap-4 min-h-0">
+      <div className="flex flex-col lg:flex-row flex-1 gap-4 min-h-0">
         {/* Main plot */}
-        <div className="flex-1 min-h-0 rounded-md overflow-hidden border border-slate-700/60 bg-slate-950">
+        <div className="h-72 lg:h-auto lg:flex-1 min-h-0 rounded-md overflow-hidden border border-slate-700/60 bg-slate-950">
           <canvas
             ref={plotCanvasRef}
             className="w-full h-full block"
@@ -404,7 +418,7 @@ export function Visualization() {
         </div>
 
         {/* Right column: loss + coefficients */}
-        <div className="flex flex-col gap-3 w-52 shrink-0">
+        <div className="flex flex-col gap-3 w-full lg:w-52 shrink-0">
           <SectionHeading>Loss curve</SectionHeading>
           <div className="rounded-md overflow-hidden border border-slate-700/60 bg-slate-950 h-36">
             <canvas
