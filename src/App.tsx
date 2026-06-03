@@ -169,6 +169,16 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {/* ── Footer ── */}
+      <footer
+        className="shrink-0 px-4 sm:px-6 py-2 text-center text-xs text-slate-500
+                   bg-slate-900 border-t border-slate-700/60"
+      >
+        Built by{' '}
+        <span className="text-slate-400 font-medium">Luka Nežak</span> with
+        Claude
+      </footer>
     </div>
   )
 }

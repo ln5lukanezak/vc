@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vc-1-lemon.vercel.app/sitemap.xml
